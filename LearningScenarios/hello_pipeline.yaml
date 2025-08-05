@@ -1,0 +1,23 @@
+apiVersion: ai.sap.com/v1alpha1
+kind: ServingTemplate
+metadata:
+  name: my-model-serving-template
+  annotations:
+    scenarios.ai.sap.com/name: "my-serving-scenario"
+    scenarios.ai.sap.com/description: "Serving scenario for my registered model"
+    executables.ai.sap.com/name: "my-model-serving"
+    executables.ai.sap.com/description: "Deployment of my trained model"
+  labels:
+    ai.sap.com/version: "1.0.0"
+spec:
+  inputs:
+    parameters:
+      - name: model_artifact
+        type: string
+  template:
+    spec:
+      containers:
+        - name: model-container
+          image: "docker.io/mydocker/image:latest"
+          args: ["--model", "{{inputs.parameters.model_artifact}}"]
+  resourcePlan: starter
