@@ -1,14 +1,14 @@
 apiVersion: ai.sap.com/v1alpha1
 kind: ServingTemplate
 metadata:
-  name: my-model-serving-template
+  name: my-inference-scenario
   annotations:
-    scenarios.ai.sap.com/name: "my-serving-scenario"
-    scenarios.ai.sap.com/description: "Serving scenario for my registered model"
-    executables.ai.sap.com/name: "my-model-serving"
-    executables.ai.sap.com/description: "Deployment of my trained model"
-  labels:
-    ai.sap.com/version: "1.0.0"
+    scenarios.ai.sap.com/name: "churn-model-inference"
+    scenarios.ai.sap.com/description: "Scenario to serve the trained churn prediction model."
+    executables.ai.sap.com/name: "churn-model-serving"
+    executables.ai.sap.com/description: "Serving executable for churn model artifact."
+labels:
+  ai.sap.com/version: "1.0.0"
 spec:
   inputs:
     parameters:
@@ -17,7 +17,7 @@ spec:
   template:
     spec:
       containers:
-        - name: model-container
-          image: "docker.io/mydocker/image:latest"
+        - name: inference-container
+          image: "docker.io/myrepo/churn-model-serving:latest"
           args: ["--model", "{{inputs.parameters.model_artifact}}"]
   resourcePlan: starter
