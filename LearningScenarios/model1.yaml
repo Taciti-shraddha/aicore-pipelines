@@ -3,37 +3,24 @@ kind: ServingTemplate
 metadata:
   name: my-inference-scenario
   annotations:
-    scenarios.ai.sap.com/name: "churn-model-inference"
-    scenarios.ai.sap.com/description: "Scenario to serve the trained churn prediction model."
-    executables.ai.sap.com/name: "churn-model-serving"
-    executables.ai.sap.com/description: "Serving executable for churn model artifact."
+    scenarios.ai.sap.com/name: "my-inference-scenario"
+    scenarios.ai.sap.com/description: "Inference scenario for my trained model."
+    executables.ai.sap.com/name: "my-inference-serving"
+    executables.ai.sap.com/description: "Serving executable for inference."
   labels:
     ai.sap.com/version: "1.0.0"
 spec:
   template:
     apiVersion: serving.kserve.io/v1beta1
     metadata:
-      annotations: |
-        autoscaling.knative.dev/metric: concurrency
-        autoscaling.knative.dev/target: 1
-        autoscaling.knative.dev/targetBurstCapacity: 0
       labels: |
         ai.sap.com/resourcePlan: starter
     spec: |
       predictor:
-        imagePullSecrets:
-        - name: my-docker-secret
         minReplicas: 1
-        maxReplicas: 2
         containers:
         - name: kserve-container
-          image: docker.io/myrepo/churn-model-serving:latest
+          image: docker.io/myrepo/my-inference-image:latest
+          args: ["--model", "/models/my_model_file"]
           ports:
             - containerPort: 9001
-              protocol: TCP
-          command: ["/bin/sh", "-c"]
-          args:
-            - "python /app/src/main.py"
-          env:
-          - name: MODEL_PATH
-            value: /models/my-model-file
