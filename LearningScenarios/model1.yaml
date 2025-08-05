@@ -15,14 +15,14 @@ spec:
     metadata:
       labels: |
         ai.sap.com/resourcePlan: starter
-   spec: |
-  predictor:
-    minReplicas: 1
-    containers:
-    - name: kserve-container
-      image: docker.io/myrepo/my-inference-image:latest
-      ports:
-        - containerPort: 9001
-          protocol: TCP
-      args: ["--model", "/models/my_model_file"]
+  spec: |
+    predictor:
+      minReplicas: 1
+      containers:
+      - name: kserve-container
+        image: docker.io/myrepo/my-inference-image:latest
+        ports:
+          - containerPort: 9001
+            protocol: TCP
+        args: ["--model", "/models/my_model_file"]
 
