@@ -1,27 +1,29 @@
-apiVersion: ai.sap.com/v1alpha1
-kind: ServingTemplate
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
 metadata:
-  name: my-inference-scenario
+  name: first-pipeline # Executable ID (max length 64 lowercase-hyphen-separated), please modify this to any value if you are not the only user of your SAP AI Core instance. Example: `first-pipeline-1234`
   annotations:
-    scenarios.ai.sap.com/name: "my-inference-scenario"
-    scenarios.ai.sap.com/description: "Inference scenario for my trained model."
-    executables.ai.sap.com/name: "my-inference-serving"
-    executables.ai.sap.com/description: "Serving executable for inference."
+    scenarios.ai.sap.com/description: "Introduction to SAP AI Core"
+    scenarios.ai.sap.com/name: "Tutorial"
+    executables.ai.sap.com/description: "Greets the user"
+    executables.ai.sap.com/name: "Hello Pipeline"
   labels:
-    ai.sap.com/version: "1.0.0"
+    scenarios.ai.sap.com/id: "learning"
+    ai.sap.com/version: "1.0"
 spec:
-  template:
-    apiVersion: serving.kserve.io/v1beta1
-    metadata:
-      labels: |
-        ai.sap.com/resourcePlan: starter
-    spec: |
-      predictor:
-        minReplicas: 1
-        containers:
-        - name: kserve-container
-          image: docker.io/myrepo/my-inference-image:latest
-          args: ["--model", "/models/my_model_file"]
-          ports:
-            - containerPort: 9001
-              protocol: TCP
+  entrypoint: mypipeline
+  templates:
+  - name: mypipeline
+    steps:
+    - - name: greet
+        template: greeter
+
+  - name: greeter
+    container:
+      image: docker.io/python:latest
+      command:
+        - python3
+        - '-c'
+      args:
+       - |
+        print("Hello from SAP AI Core")
