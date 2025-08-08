@@ -12,16 +12,17 @@ metadata:
 spec:
   template:
     apiVersion: serving.kserve.io/v1beta1
+    kind: InferenceService
     metadata:
-      labels: |
+      labels:
         ai.sap.com/resourcePlan: starter
-    spec: |
+    spec:
       predictor:
         minReplicas: 1
         containers:
-        - name: kserve-container
-          image: docker.io/yourrepo/pmrp-delay-predictor:latest
-          args: ["--model", "/models/delay_predictor_model"]
-          ports:
-            - containerPort: 9001
-              protocol: TCP
+          - name: kserve-container
+            image: docker.io/yourrepo/pmrp-delay-predictor:latest
+            args: ["--model", "/models/delay_predictor_model"]
+            ports:
+              - containerPort: 9001
+                protocol: TCP
